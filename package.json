@@ -1,0 +1,22 @@
+{
+  "name": "parking_lot",
+  "version": "1.0.0",
+  "description": "Parking lot problem",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vineetpal123/parking_lot.git"
+  },
+  "author": "Vineet pal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vineetpal123/parking_lot/issues"
+  },
+  "homepage": "https://github.com/vineetpal123/parking_lot#readme",
+  "dependencies": {
+    "jest": "^27.0.4"
+  }
+}
