@@ -3,10 +3,33 @@ const readLine = require('readline');
 const fs = require('fs');
 const parkingLot = require('./modules/parkingLot.js');
 
+// to avoid memory leaks errors, default max listeners = 10
+require('events').EventEmitter.defaultMaxListeners = 0;
+
 var commandLineInputs = process.argv;
-console.log('commandLineInputs', commandLineInputs)
-var interactiveMode = true
-openInteractiveConsole();
+var interactiveMode = false
+
+if (commandLineInputs[commandLineInputs.length - 1].endsWith('.txt')) {
+    interactiveMode = false;
+    fs.readFile(commandLineInputs[2], 'utf-8', function (err, data) {
+        if (err) {
+            console.log('Error in reading file');
+        }
+        var arr = data.split('\n');
+        for (var i = 0; i < arr.length; i++) {
+            processUserCommands(arr[i]);
+        }
+
+        // returning to console once all the inputs are processed
+        process.exit(1);
+    });
+}
+else {
+    interactiveMode = true;
+    openInteractiveConsole();
+}
+
+
 /**
  * @description called when users want to interact via console
  * it process one command at a time
@@ -34,20 +57,12 @@ function openInteractiveConsole() {
  */
 function processUserCommands(input) {
     var userInput = input.trim().split(' ')
-    var userCommand = userInput[0],
-        totalParkingSlots,
-        parkingSlotNumber,
-        parkingSlotNumbers;
+    var userCommand = userInput[0];
     switch (userCommand) {
         case 'create_parking_lot':
             try {
-                userInput[1] = parseInt(userInput[1])
-                if (Number.isInteger(userInput[1])) {
-                    totalParkingSlots = parkingLot.createParkingLot(userInput[1]);
-                    console.log('Created a parking lot with ' + totalParkingSlots + ' slots.');
-                } else {
-                    console.log('Invalid slot');
-                }
+                let result = parkingLot.createParkingLot(userInput[1]);
+                console.log(result);
             }
             catch (err) {
                 console.log(err.message);
@@ -55,12 +70,8 @@ function processUserCommands(input) {
             break;
         case 'park':
             try {
-                if (userInput[1]) {
-                    parkingSlotNumber = parkingLot.parkCar(userInput[1]);
-                    console.log('Allocated slot number: ' + parkingSlotNumber);
-                } else {
-                    console.log('Please provide registration number');
-                }
+                let result = parkingLot.parkCar(userInput[1]);
+                console.log(result);
             }
             catch (err) {
                 console.log(err.message);
@@ -68,28 +79,17 @@ function processUserCommands(input) {
             break;
         case 'leave':
             try {
-                if (userInput[1] && (userInput[2])) {
-                    parkingSlotNumber = parkingLot.leaveCar(userInput);
-                    userInput[2] = parseInt(userInput[2])
-                    let charge = (2>=userInput[2]) ? 10 : (userInput[2]-2) * 10 + 10;
-                    console.log("Registration number " + userInput[1] + ' with Slot number ' + parkingSlotNumber + ' is free with Charge '+ charge);
-                }else{
-                    console.log('Please provide registration number and hours');
-                }
+                let result = parkingLot.leaveCar(userInput);
+                console.log(result);
             }
             catch (err) {
-                console.log(err.message); // handling exceptions
+                console.log(err.message);
             }
             break;
         case 'status':
             try {
-                var parkingSlotStatus = parkingLot.getParkingStatus();
-                if (parkingSlotStatus.length > 1) {
-                    console.log(parkingSlotStatus.join('\n'));
-                }
-                else {
-                    console.log('Sorry, parking lot is empty'); // what if it's empty
-                }
+                let result = parkingLot.getParkingStatus();
+                console.log(result)
             }
             catch (err) {
                 console.log(err.message);
