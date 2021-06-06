@@ -12,7 +12,7 @@ Users can interact with the Parking Lot system via a following simple set of com
 
 - **create_parking_lot**: `create_parking_lot 6` will create a parking lot with 6 slots.
 
-- **park < REGISTRATION NUMBER > < COLOR >**: `park KA-01-HH-1234` will allocate the nearest slot from entry gate.
+- **park < REGISTRATION NUMBER >**: `park KA-01-HH-1234` will allocate the nearest slot from entry gate.
 
 - **leave**: `leave KA-01-HH-1234 4` will make slot free of registered car.
 
